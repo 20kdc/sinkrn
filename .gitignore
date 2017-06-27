@@ -1,0 +1,12 @@
+*
+
+!LICENSE.md
+!README.md
+!.gitignore
+!compile.sh
+!bnr.sh
+!*.b
+!kernel
+!prog
+!kernel/*.b
+!prog/*.b
