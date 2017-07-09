@@ -2,9 +2,10 @@
 # yes, vifino thought up the name "sinkrn".
 # 'sinos' refers to the project in general.
 
-# GCC ZPU Toolchain. Kernel only uses this for the assembler/objdump - so this is replacable, in theory.
+# GCC ZPU Toolchain. Kernel only uses this for the assembler/objdump.
 # In practice? vifino would like the servers to be written in C, with good reason (sanity).
 # Still, kernel is simpler and maybe more portable this way.
+# ... in other news, ZPUCHAIN is not required unless using compile-gcc.sh.
 ZPUCHAIN=~/Documents/ATOMINST/zpugcc/bin
 ZBC=../../Lua/ZBC/
 # lua-cpuemus + SINMMU.
@@ -15,7 +16,11 @@ rm out/*
 
 # build the 'hello server' (the kernel testbed application, written in B to be consistent)
 cat pututil.b mmucall.b prog/hello.b > out/hello.b
-./compile.sh hello $ZPUCHAIN $ZBC
+
+# this controls the toolchain used
+
+# ./compile.sh hello $ZBC
+./compile-gcc.sh hello $ZPUCHAIN $ZBC
 
 # embed the SIStem: Sinkrn Initialization Stem
 cat out/hello.bin | ./kembed.lua > out/kembed.b

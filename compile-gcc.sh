@@ -8,18 +8,14 @@ SINOS=`pwd`
 
 cd $ZBC
 
-echo .scope lib base > $SINOS/out/$PROJNAME.S
-
-cat $SINOS/base.S >> $SINOS/out/$PROJNAME.S
 lua zbc.lua core.lex -- core.par -- pass.zpu-char -- pass.consteval -I -C -B \
  -DWORD_CHARS 4 -DWORD_VALS 4 \
  -DNUM_PROCS 64 -DNUM_PPP 64 \
  -DSYSCALL_BUDGET 64 \
  -DSTACK_SIZE_VALS 8192 -DVM_STACK_TOP 1879048192 \
  -- pass.optswitch -- pass.mkextern __asm__ __asmnv__ < $SINOS/out/$PROJNAME.b > $SINOS/out/$PROJNAME.ast
+lua zbc.lua output.zpu < $SINOS/out/$PROJNAME.ast > $SINOS/out/$PROJNAME.S
 
-echo .scope project $PROJNAME >> $SINOS/out/$PROJNAME.S
-
-lua zbc.lua output.zpu < $SINOS/out/$PROJNAME.ast >> $SINOS/out/$PROJNAME.S
-
-lua zbc.lua asm.zpu < $SINOS/out/$PROJNAME.S >> $SINOS/out/$PROJNAME.bin
+cd $SINOS
+$ZPUCHAIN/zpu-elf-gcc -Os base.S out/$PROJNAME.S -N -nostdlib -o out/$PROJNAME.elf
+$ZPUCHAIN/zpu-elf-objcopy -O binary out/$PROJNAME.elf out/$PROJNAME.bin

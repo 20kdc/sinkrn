@@ -4,8 +4,10 @@
 !README.md
 !.gitignore
 !compile.sh
+!compile-gcc.sh
 !bnr.sh
 !*.b
+!kembed.lua
 !kernel
 !prog
 !kernel/*.b
